@@ -1,4 +1,4 @@
-package com.geekbrains.tests
+package com.geekbrains.tests.search
 
 import com.geekbrains.tests.model.SearchResponse
 import com.geekbrains.tests.repository.GitHubApi

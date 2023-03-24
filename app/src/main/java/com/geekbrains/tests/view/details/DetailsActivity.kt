@@ -14,6 +14,17 @@ class DetailsActivity : AppCompatActivity(), ViewDetailsContract {
 
     private val presenter: PresenterDetailsContract = DetailsPresenter(this)
 
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+
+        presenter.onAttach()
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        presenter.onDetach()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details)

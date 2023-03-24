@@ -23,6 +23,17 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
     private val presenter: PresenterSearchContract = SearchPresenter(this, createRepository())
     private var totalCount: Int = 0
 
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+
+        presenter.onAttach()
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        presenter.onDetach()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
