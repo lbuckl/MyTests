@@ -1,5 +1,6 @@
 package com.geekbrains.tests.presenter.search
 
+import android.util.Log
 import com.geekbrains.tests.model.SearchResponse
 import com.geekbrains.tests.repository.GitHubRepository
 import com.geekbrains.tests.repository.GitHubRepository.GitHubRepositoryCallback
@@ -19,17 +20,21 @@ internal class SearchPresenter internal constructor(
     private val repository: GitHubRepository
 ) : PresenterSearchContract, GitHubRepositoryCallback {
 
+    private var activeObservers = 0
+
+    fun getActiveObserversCount(): Int = activeObservers
+
     override fun searchGitHub(searchQuery: String) {
         viewContract.displayLoading(true)
         repository.searchGithub(searchQuery, this)
     }
 
     override fun onAttach() {
-        //TODO("Not yet implemented")
+        activeObservers++
     }
 
     override fun onDetach() {
-        //TODO("Not yet implemented")
+        activeObservers--
     }
 
     override fun handleGitHubResponse(response: Response<SearchResponse?>?) {
