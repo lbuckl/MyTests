@@ -1,8 +1,9 @@
-package com.geekbrains.tests
+package com.geekbrains.tests.search
 
 import com.geekbrains.tests.model.SearchResponse
 import com.geekbrains.tests.model.SearchResult
 import com.geekbrains.tests.presenter.search.SearchPresenter
+import com.geekbrains.tests.repository.GitHubApi
 import com.geekbrains.tests.repository.GitHubRepository
 import com.geekbrains.tests.view.search.ViewSearchContract
 import org.junit.Assert.*
@@ -16,22 +17,20 @@ import retrofit2.Response
 //Тестируем наш Презентер
 class SearchPresenterTest {
 
-    private lateinit var presenter: SearchPresenter
+    private val repository = mock(GitHubRepository::class.java)
 
-    @Mock
-    private lateinit var repository: GitHubRepository
+    private val viewContract = mock(ViewSearchContract::class.java)
 
-    @Mock
-    private lateinit var viewContract: ViewSearchContract
+    private val presenter = SearchPresenter(viewContract, repository)
 
-    @Before
+    /*@Before
     fun setUp() {
         //Обязательно для аннотаций "@Mock"
         //Раньше было @RunWith(MockitoJUnitRunner.class) в аннотации к самому классу (SearchPresenterTest)
         MockitoAnnotations.initMocks(this)
         //Создаем Презентер, используя моки Репозитория и Вью, проинициализированные строкой выше
         presenter = SearchPresenter(viewContract, repository)
-    }
+    }*/
 
     @Test //Проверим вызов метода searchGitHub() у нашего Репозитория
     fun searchGitHub_Test() {
@@ -148,5 +147,20 @@ class SearchPresenterTest {
 
         //Убеждаемся, что ответ от сервера обрабатывается корректно
         verify(viewContract, times(1)).displaySearchResults(searchResults, 101)
+    }
+
+    @Test
+    fun onAttach_onDetach(){
+        val attachCount = 3
+
+        val detachCount = 1
+
+        repeat(attachCount) {presenter.onAttach()}
+
+        assertTrue(presenter.getActiveObserversCount() == attachCount)
+
+        repeat(detachCount) {presenter.onDetach()}
+
+        assertTrue(presenter.getActiveObserversCount() == attachCount-detachCount)
     }
 }
